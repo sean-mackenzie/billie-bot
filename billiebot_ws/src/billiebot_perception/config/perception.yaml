@@ -1,0 +1,34 @@
+billie_detector_node:
+  ros__parameters:
+    image_topic: /oak/rgb/image_raw
+    depth_topic: /oak/stereo/depth
+    detector_backend: mock
+    model_path: ""
+    confidence_threshold: 0.5
+    dog_class_name: dog
+    dog_class_id: 16
+    publish_debug_image: false
+    mock_publish_detection: false
+    mock_confidence: 0.9
+    camera_frame: oak_camera_frame
+    horizontal_fov_rad: 1.204
+
+visual_state_node:
+  ros__parameters:
+    detection_topic: /billie/detections
+    output_topic: /billie/visual_state
+    detection_timeout_sec: 2.0
+    moving_bearing_threshold_rad: 0.08
+    stationary_duration_sec: 20.0
+    minimum_confidence: 0.5
+
+mock_camera_node:
+  ros__parameters:
+    rgb_topic: /oak/rgb/image_raw
+    depth_topic: /oak/stereo/depth
+    camera_info_topic: /oak/rgb/camera_info
+    frame_id: oak_camera_optical_frame
+    width: 640
+    height: 400
+    publish_rate_hz: 10.0
+    depth_m: 1.5

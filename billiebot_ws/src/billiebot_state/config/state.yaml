@@ -1,0 +1,12 @@
+billie_state_estimator:
+  ros__parameters:
+    detection_topic: /billie/detections
+    audio_topic: /billie/audio_events
+    odom_topic: /odom
+    state_topic: /billie/state
+    detection_timeout: 5.0
+    sleep_stationary_duration: 30.0
+    movement_threshold: 0.10
+    audio_event_timeout: 4.0
+    minimum_confidence: 0.5
+    publish_rate_hz: 2.0

@@ -1,0 +1,5 @@
+daily_summary_node:
+  ros__parameters:
+    database_path: ~/.billiebot/billiebot_events.sqlite3
+    date: ""
+    output_path: ~/.billiebot/summaries

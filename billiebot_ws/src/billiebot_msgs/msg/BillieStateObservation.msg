@@ -1,0 +1,7 @@
+std_msgs/Header header
+string state_label
+float32 confidence
+string evidence_source
+geometry_msgs/PoseStamped robot_pose
+geometry_msgs/PoseStamped estimated_billie_pose
+string media_reference

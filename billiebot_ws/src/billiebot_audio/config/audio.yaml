@@ -1,0 +1,15 @@
+audio_event_node:
+  ros__parameters:
+    audio_device: default
+    use_audio_device: false
+    audio_level_topic: /billiebot/audio_level_db
+    sample_rate: 16000
+    frame_size: 1024
+    loudness_threshold_db: 68.0
+    bark_classifier_mode: threshold
+    minimum_event_duration: 0.15
+    event_cooldown: 1.0
+    mock_publish_events: false
+    mock_event_type: bark
+    mock_loudness_db: 82.0
+    doa_rad: 0.0

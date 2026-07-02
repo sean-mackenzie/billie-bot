@@ -1,0 +1,15 @@
+frame_id: map
+waypoints:
+  - name: living_room_center
+    x: 0.0
+    y: 0.0
+    yaw: 0.0
+  - name: kitchen_entry
+    x: 1.0
+    y: 0.0
+    yaw: 1.57
+  - name: hallway
+    x: 1.0
+    y: 1.0
+    yaw: 3.14
+scan_rotation_rad: 6.283

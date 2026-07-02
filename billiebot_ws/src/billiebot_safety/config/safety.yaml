@@ -1,0 +1,9 @@
+safety_supervisor_node:
+  ros__parameters:
+    input_cmd_topic: /cmd_vel
+    output_cmd_topic: /cmd_vel_safe
+    max_linear_velocity: 0.25
+    max_angular_velocity: 0.9
+    command_timeout_sec: 0.5
+    stop_mode: false
+    publish_rate_hz: 20.0

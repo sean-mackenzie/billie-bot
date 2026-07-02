@@ -1,0 +1,183 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="billiebot">
+  <xacro:include filename="$(find billiebot_description)/urdf/inertial_macros.xacro"/>
+
+  <xacro:arg name="use_lidar" default="true"/>
+  <xacro:arg name="use_camera" default="true"/>
+  <xacro:arg name="use_imu" default="true"/>
+  <xacro:arg name="use_mic" default="true"/>
+
+  <xacro:property name="wheel_radius" value="0.034"/>
+  <xacro:property name="wheel_width" value="0.026"/>
+  <xacro:property name="wheel_separation" value="0.298"/>
+  <xacro:property name="chassis_x" value="0.28"/>
+  <xacro:property name="chassis_y" value="0.26"/>
+  <xacro:property name="chassis_z" value="0.09"/>
+
+  <material name="billie_white"><color rgba="0.92 0.94 0.95 1.0"/></material>
+  <material name="billie_blue"><color rgba="0.12 0.25 0.78 1.0"/></material>
+  <material name="billie_black"><color rgba="0.02 0.02 0.025 1.0"/></material>
+  <material name="billie_red"><color rgba="0.78 0.08 0.06 1.0"/></material>
+  <material name="billie_gray"><color rgba="0.38 0.41 0.44 1.0"/></material>
+
+  <!-- base_footprint is the ground-projected navigation frame. -->
+  <link name="base_footprint"/>
+
+  <joint name="base_footprint_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 ${wheel_radius}" rpy="0 0 0"/>
+  </joint>
+
+  <!-- base_link is at the wheel axle center, matching the reference robot. -->
+  <link name="base_link"/>
+
+  <joint name="chassis_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="chassis_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="chassis_link">
+    <visual>
+      <origin xyz="0.09 0 0.0635" rpy="0 0 0"/>
+      <geometry><box size="${chassis_x} ${chassis_y} ${chassis_z}"/></geometry>
+      <material name="billie_white"/>
+    </visual>
+    <collision>
+      <origin xyz="0.09 0 0.0635" rpy="0 0 0"/>
+      <geometry><box size="${chassis_x} ${chassis_y} ${chassis_z}"/></geometry>
+    </collision>
+    <xacro:inertial_box mass="0.5" x="${chassis_x}" y="${chassis_y}" z="${chassis_z}">
+      <origin xyz="0.09 0 0.0635" rpy="0 0 0"/>
+    </xacro:inertial_box>
+  </link>
+
+  <joint name="left_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_wheel_link"/>
+    <origin xyz="0 ${wheel_separation/2.0} 0" rpy="${-pi/2} 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="1.0" velocity="10.0"/>
+  </joint>
+
+  <link name="left_wheel_link">
+    <visual>
+      <geometry><cylinder length="${wheel_width}" radius="${wheel_radius}"/></geometry>
+      <material name="billie_blue"/>
+    </visual>
+    <collision>
+      <geometry><cylinder length="${wheel_width}" radius="${wheel_radius}"/></geometry>
+    </collision>
+    <xacro:inertial_cylinder mass="0.1" length="${wheel_width}" radius="${wheel_radius}">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:inertial_cylinder>
+  </link>
+
+  <joint name="right_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_wheel_link"/>
+    <origin xyz="0 ${-wheel_separation/2.0} 0" rpy="${pi/2} 0 0"/>
+    <axis xyz="0 0 -1"/>
+    <limit effort="1.0" velocity="10.0"/>
+  </joint>
+
+  <link name="right_wheel_link">
+    <visual>
+      <geometry><cylinder length="${wheel_width}" radius="${wheel_radius}"/></geometry>
+      <material name="billie_blue"/>
+    </visual>
+    <collision>
+      <geometry><cylinder length="${wheel_width}" radius="${wheel_radius}"/></geometry>
+    </collision>
+    <xacro:inertial_cylinder mass="0.1" length="${wheel_width}" radius="${wheel_radius}">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:inertial_cylinder>
+  </link>
+
+  <joint name="caster_joint" type="fixed">
+    <parent link="chassis_link"/>
+    <child link="caster_link"/>
+    <origin xyz="0.18 0 0.0185" rpy="0 0 0"/>
+  </joint>
+
+  <link name="caster_link">
+    <visual>
+      <geometry><sphere radius="0.0525"/></geometry>
+      <material name="billie_black"/>
+    </visual>
+    <collision>
+      <geometry><sphere radius="0.0525"/></geometry>
+    </collision>
+    <xacro:inertial_sphere mass="0.1" radius="0.0525">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+    </xacro:inertial_sphere>
+  </link>
+
+  <xacro:if value="$(arg use_lidar)">
+    <joint name="laser_joint" type="fixed">
+      <parent link="chassis_link"/>
+      <child link="laser_frame"/>
+      <origin xyz="0.09 0.0 0.13575" rpy="0 0 0"/>
+    </joint>
+    <link name="laser_frame">
+      <visual>
+        <geometry><cylinder radius="0.035" length="0.0545"/></geometry>
+        <material name="billie_red"/>
+      </visual>
+      <collision><geometry><cylinder radius="0.035" length="0.0545"/></geometry></collision>
+      <xacro:inertial_cylinder mass="0.170" length="0.0545" radius="0.035">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+      </xacro:inertial_cylinder>
+    </link>
+  </xacro:if>
+
+  <xacro:if value="$(arg use_camera)">
+    <joint name="oak_camera_joint" type="fixed">
+      <parent link="chassis_link"/>
+      <child link="oak_camera_frame"/>
+      <origin xyz="0.20 0 0.115" rpy="0 0 0"/>
+    </joint>
+    <link name="oak_camera_frame">
+      <visual>
+        <origin xyz="-0.0125 0 0" rpy="0 0 0"/>
+        <geometry><box size="0.025 0.091 0.028"/></geometry>
+        <material name="billie_gray"/>
+      </visual>
+    </link>
+    <joint name="oak_camera_optical_joint" type="fixed">
+      <parent link="oak_camera_frame"/>
+      <child link="oak_camera_optical_frame"/>
+      <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
+    </joint>
+    <link name="oak_camera_optical_frame"/>
+  </xacro:if>
+
+  <xacro:if value="$(arg use_imu)">
+    <joint name="imu_joint" type="fixed">
+      <parent link="chassis_link"/>
+      <child link="imu_link"/>
+      <origin xyz="0.04 0 0.105" rpy="0 0 0"/>
+    </joint>
+    <link name="imu_link">
+      <visual>
+        <geometry><box size="0.025 0.02 0.006"/></geometry>
+        <material name="billie_black"/>
+      </visual>
+    </link>
+  </xacro:if>
+
+  <xacro:if value="$(arg use_mic)">
+    <joint name="mic_joint" type="fixed">
+      <parent link="chassis_link"/>
+      <child link="mic_link"/>
+      <origin xyz="0.02 0 0.14" rpy="0 0 0"/>
+    </joint>
+    <link name="mic_link">
+      <visual>
+        <geometry><cylinder radius="0.025" length="0.008"/></geometry>
+        <material name="billie_black"/>
+      </visual>
+    </link>
+  </xacro:if>
+</robot>
