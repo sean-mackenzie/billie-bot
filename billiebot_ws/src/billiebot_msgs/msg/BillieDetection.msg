@@ -1,0 +1,12 @@
+std_msgs/Header header
+string detector_name
+string class_label
+float32 confidence
+float32 bbox_x
+float32 bbox_y
+float32 bbox_width
+float32 bbox_height
+float32 range_m
+float32 bearing_rad
+geometry_msgs/PoseStamped estimated_pose
+bool is_billie_candidate

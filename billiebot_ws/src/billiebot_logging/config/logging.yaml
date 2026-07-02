@@ -1,0 +1,7 @@
+event_logger_node:
+  ros__parameters:
+    database_path: ~/.billiebot/billiebot_events.sqlite3
+    save_media_references: true
+    log_detections: true
+    log_audio_events: true
+    log_state_observations: true
